@@ -1,0 +1,76 @@
+<openerp>
+  <data>
+
+    <!-- Financiera Rekognition configuracion -->
+
+    <record model="ir.ui.view" id="financiera_rekognition_conf_tree">
+      <field name="name">financiera.rekognition.config.tree</field>
+      <field name="model">financiera.rekognition.config</field>
+      <field name="arch" type="xml">
+        <tree create="false" delete="false">
+          <field name="name"/>
+          <field name="company_id" groups="base.group_erp_manager"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="financiera_rekognition_conf_form" model="ir.ui.view">
+			<field name="name">financiera.rekognition.config.form</field>
+			<field name="model">financiera.rekognition.config</field>
+			<field name="arch" type="xml">
+				<form string="Configuracion" create="false" delete="false">
+					<header>
+					</header>
+					<sheet>
+						<group>
+							<group string="Datos de conexión">
+								<field name="company_id" groups="base.group_erp_manager"/>
+								<field name="name"/>
+								<field name="id_access_key"/>
+								<field name="secret_access_key"/>
+								<field name="region"/>
+							</group>
+							<group>
+							</group>
+						</group>
+						<group col="3">
+							<group string="DNI frontal">
+								<field name="check_idcards_document_passport"/>
+								<field name="check_idcards_document_passport_confidence"/>
+								<field name="check_idcards_document_passport_minimal_bounding" groups="base.group_erp_manager"/>
+								<field name="check_person_human"/>
+								<field name="check_person_human_confidence"/>
+								<field name="check_person_human_minimal_bounding" groups="base.group_erp_manager"/>
+								<field name="check_text_identification_number"/>
+								<field name="check_text_names"/>
+							</group>
+							<group string="DNI posterior">
+							</group>
+							<group string="selfie">
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="financiera_rekognition_config_action">
+      <field name="name">Configuracion</field>
+      <field name="res_model">financiera.rekognition.config</field>
+      <field name="view_mode">tree,form</field>
+      <field name="view_id" ref="financiera_rekognition_conf_tree"/>
+    </record>
+
+    <!-- Top menu item -->
+
+    <menuitem name="Rekognition" id="menu_rekognition" 
+    web_icon="financiera_rekognition,static/description/icon.png" groups="financiera_rekognition.manager"/>
+    
+    <!-- menu categories -->
+    
+    <menuitem name="Configuracion" id="menu_rekognition_config" sequence="100" parent="menu_rekognition"/>
+    <menuitem name="Configuracion" id="menu_rekognition_config_action" parent="menu_rekognition_config"
+     action="financiera_rekognition_config_action" sequence="100"/>
+
+  </data>
+</openerp>

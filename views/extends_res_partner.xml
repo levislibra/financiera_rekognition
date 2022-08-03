@@ -1,0 +1,187 @@
+<openerp>
+	<data>
+
+
+		<record model="ir.ui.view" id="financiera_rekognition_result_tree">
+      <field name="name">res.partner.tree</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <tree create="false" delete="false" default_order='rekognition_last_update desc'>
+          <field name="rekognition_last_update" string="Actualizacion"/>
+					<field name="name"/>
+					<field name="rekognition_dni_frontal_result" string="DNI Frontal"/>
+					<field name="rekognition_dni_posterior_result" string="DNI Posterior"/>
+          <field name="company_id" groups="base.group_erp_manager"/>
+        </tree>
+      </field>
+    </record>
+
+		<record id="financiera_rekognition_result_form"  model="ir.ui.view">
+			<field name="name">Rekognition partner form</field>
+			<field name="model">res.partner</field>
+			<field name="arch" type="xml">
+				<form string="Reconicimientos">
+					<sheet>
+						<group col="3">
+							<group string="DNI frontal" col="1">
+								<group>
+									<field name="app_dni_frontal" readonly="0" widget="image"/>
+									<field name="app_dni_frontal_download_name" invisible="1"/>
+									<field name="app_dni_frontal_download" string=" " filename="app_dni_frontal_download_name" readonly="1"/>
+									<label string="Rsultado"/>
+									<h1><field name="rekognition_dni_frontal_result" readonly="1"/></h1>
+									<label string=" "/>
+									<button string="Rekognition check" name="rekognition_dni_frontal" type="object" class="oe_highlight"/>
+								</group>
+								<notebook>
+									<page name="pruebas" string="Pruebas">
+										<field name="rekognition_dni_frontal_result_ids" string="Historico" readonly="1">
+											<tree limit="10">
+												<field name="rekognition_type"/>
+												<field name="label_ids"/>
+												<field name="text_ids"/>
+												<field name="result"/>
+												<field name="description"/>
+											</tree>
+											<form>
+												<group>
+													<field name="image" widget="image"/>
+													<field name="label_ids">
+														<tree>
+															<field name="label"/>
+															<field name="confidence"/>
+														</tree>
+													</field>
+													<field name="text_ids">
+														<tree>
+															<field name="text"/>
+															<field name="confidence"/>
+														</tree>
+													</field>
+													<field name="result"/>
+													<field name="description"/>
+												</group>
+											</form>
+										</field>
+									</page>
+									<page name="etiquetas" string="Etiquetas">
+										<field name="rekognition_dni_frontal_label_ids" readonly="1">
+											<tree limit="10">
+												<field name="label"/>
+												<field name="confidence"/>
+											</tree>
+										</field>
+									</page>
+									<page name="textos" string="Textos">
+										<field name="rekognition_dni_frontal_text_ids" readonly="1">
+											<tree limit="10">
+												<field name="text"/>
+												<field name="confidence"/>
+											</tree>
+										</field>
+									</page>
+								</notebook>
+							</group>
+							<group string="DNI posterior" col="1">
+								<group>
+									<field name="app_dni_posterior" readonly="0" widget="image"/>
+									<field name="app_dni_posterior_download_name" invisible="1"/>
+									<field name="app_dni_posterior_download" string=" " filename="app_dni_posterior_download_name" readonly="1"/>
+									<label string="Rsultado"/>
+									<h1><field name="rekognition_dni_posterior_result" readonly="1"/></h1>
+									<label string=" "/>
+									<button string="Rekognition check" name="rekognition_dni_posterior" type="object" class="oe_highlight"/>
+								</group>
+								<notebook>
+									<page name="pruebas" string="Pruebas">
+										<field name="rekognition_dni_posterior_result_ids" string="Historico" readonly="1">
+											<tree limit="10">
+												<field name="rekognition_type"/>
+												<field name="label_ids"/>
+												<field name="text_ids"/>
+												<field name="result"/>
+												<field name="description"/>
+											</tree>
+											<form>
+												<group>
+													<field name="image" widget="image"/>
+													<field name="label_ids">
+														<tree>
+															<field name="label"/>
+															<field name="confidence"/>
+														</tree>
+													</field>
+													<field name="text_ids">
+														<tree>
+															<field name="text"/>
+															<field name="confidence"/>
+														</tree>
+													</field>
+													<field name="result"/>
+													<field name="description"/>
+												</group>
+											</form>
+										</field>
+									</page>
+									<page name="etiquetas" string="Etiquetas">
+										<field name="rekognition_dni_posterior_label_ids" readonly="1">
+											<tree limit="10">
+												<field name="label"/>
+												<field name="confidence"/>
+											</tree>
+										</field>
+									</page>
+									<page name="textos" string="Textos">
+										<field name="rekognition_dni_posterior_text_ids" readonly="1">
+											<tree limit="10">
+												<field name="text"/>
+												<field name="confidence"/>
+											</tree>
+										</field>
+									</page>
+								</notebook>
+							</group>
+							<group string="Selfie">
+								<field name="app_selfie" readonly="0"/>
+								<field name="app_selfie_download_name" invisible="1"/>
+								<field name="app_selfie_download" string=" " filename="app_selfie_download_name" readonly="1"/>
+								<label string=" "/>
+								<button name="button_asignar_selfie_como_perfil" string="Asignar como imagen de perfil" type="object"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="financiera_rekognition_result_action">
+      <field name="name">Reconocimientos</field>
+      <field name="res_model">res.partner</field>
+      <field name="view_mode">tree,form</field>
+			<field name="domain">[('rekognition_last_update','!=', False)]</field>
+      <field name="view_ids" eval="[(5, 0, 0), 
+        (0, 0, {'view_mode': 'tree', 'view_id': ref('financiera_rekognition_result_tree')}), 
+				(0, 0, {'view_mode': 'form', 'view_id': ref('financiera_rekognition_result_form')})]"/>
+    </record>
+
+    <menuitem name="Reconocimientos" id="menu_rekognition_result_partner" sequence="10" parent="menu_rekognition"/>
+    <menuitem name="Cliente" id="menu_rekognition_result_partner_action" parent="menu_rekognition_result_partner"
+     action="financiera_rekognition_result_action" sequence="10"/>
+
+		<!-- Vista Form Partner -->
+
+		<record id="rekognition_partner_form_inherited"  model="ir.ui.view">
+			<field name="name">Rekognition Extension partner form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="financiera_app.partner_info_declarativa_form"/>
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='app_dni_frontal']" position='after'>
+					<label string=" "/>
+					<button string="Rekognition check labels" name="rekognition_dni_frontal" type="object" class="oe_highlight"/>
+					<field name="rekognition_dni_frontal_result" readonly="1"/>
+				</xpath>
+			</field>
+		</record>
+
+	</data>
+</openerp>
